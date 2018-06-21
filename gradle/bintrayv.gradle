@@ -41,12 +41,12 @@ bintray {
             gpg {
                 sign = true
             }
-            mavenCentralSync {
-                sync = true
-                user = System.getenv('NEXUS_USERNAME')
-                password = System.getenv('NEXUS_PASSWORD')
-                close = '1'
-            }
+            // mavenCentralSync {
+            //     sync = true
+            //     user = System.getenv('NEXUS_USERNAME')
+            //     password = System.getenv('NEXUS_PASSWORD')
+            //     close = '1'
+            // }
         }
     }
 }
