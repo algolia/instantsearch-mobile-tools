@@ -1,52 +1,93 @@
 apply plugin: 'com.jfrog.bintray'
 
-version = libraryVersion
+// Create the pom configuration:
+def pomConfig = {
+    licenses {
+        license {
+            name project.ext.LICENCE
+            url project.ext.LICENCE_URL
+            distribution "repo"
+        }
+    }
+    developers {
+        developer {
+            id "algolia"
+            name "The Algolia Team"
+            email "hey@algolia.com"
+        }
+    }
 
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
+    scm {
+        url project.ext.REPO
+    }
 }
 
-task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
+publishing.publications {
+    BintrayPublication(MavenPublication) {
+        artifact sourcesJar
+        artifact "${project.buildDir}/outputs/aar/${project.name}-release.aar"
 
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-artifacts {
-    archives sourcesJar
-}
+        groupId project.ext.GROUP
+        artifactId project.ext.BASENAME
+        version project.ext.VERSION
+        description project.ext.DESC
 
-// Bintray
+        pom.withXml {
+            def root = asNode()
+            root.children().last() + pomConfig
+            root.appendNode("description", project.ext.DESC) //TODO Find why description is missing from pom.xml
+
+            final dependenciesNode = asNode().appendNode('dependencies')
+            println "Adding dependencies node"
+
+            ext.addDependency = { Dependency dep, String scope ->
+                if (dep.group == null || dep.version == null || dep.name == null || dep.name == "unspecified") {
+                    return // ignore invalid dependencies
+                }
+                println "Adding dependency $dep.name ($scope) to pom.xml"
+                final dependencyNode = dependenciesNode.appendNode('dependency')
+                dependencyNode.appendNode('groupId', dep.group)
+                dependencyNode.appendNode('artifactId', dep.name)
+                dependencyNode.appendNode('version', dep.version)
+                dependencyNode.appendNode('scope', scope)
+
+                if (!dep.transitive) {
+                    // If this dependency is transitive, we should force exclude all its dependencies them from the POM
+                    final exclusionNode = dependencyNode.appendNode('exclusions').appendNode('exclusion')
+                    exclusionNode.appendNode('groupId', '*')
+                    exclusionNode.appendNode('artifactId', '*')
+                } else if (!dep.properties.excludeRules.empty) {
+                    // Otherwise add specified exclude rules
+                    final exclusionNode = dependencyNode.appendNode('exclusions').appendNode('exclusion')
+                    dep.properties.excludeRules.each { ExcludeRule rule ->
+                        exclusionNode.appendNode('groupId', rule.group ?: '*')
+                        exclusionNode.appendNode('artifactId', rule.module ?: '*')
+                    }
+                }
+            }
+
+            // List all "api" dependencies (for new Gradle) as "compile" dependencies
+            configurations.api.getAllDependencies().each { dep -> addDependency(dep, "compile") }
+            // List all "implementation" dependencies (for new Gradle) as "runtime" dependencies
+            configurations.implementation.getAllDependencies().each { dep -> addDependency(dep, "runtime") }
+        }
+    }
+}
 
 bintray {
     user = System.getenv('BINTRAY_USER')
     key = System.getenv('BINTRAY_KEY')
 
-    configurations = ['archives']
+    publications = ['BintrayPublication']
     pkg {
-        repo = bintrayRepo
-        name = bintrayName
-        desc = libraryDescription
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = allLicenses
+        repo = 'maven'
+        name = project.ext.CODENAME
+        licenses = [project.ext.LICENSE]
+        vcsUrl = project.ext.REPO
         publish = true
-        publicDownloadNumbers = true
         version {
-            desc = libraryDescription
-            gpg {
-                sign = true
-            }
-            mavenCentralSync {
-                sync = true
-                user = System.getenv('NEXUS_USERNAME')
-                password = System.getenv('NEXUS_PASSWORD')
-                close = '1'
-            }
+            name = project.ext.VERSION
+            vcsTag = project.ext.VERSION
         }
     }
 }
