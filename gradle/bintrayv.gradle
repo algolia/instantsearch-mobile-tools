@@ -4,8 +4,8 @@ apply plugin: 'com.jfrog.bintray'
 def pomConfig = {
     licenses {
         license {
-            name project.ext.LICENCE
-            url project.ext.LICENCE_URL
+            name project.ext.LICENSE
+            url project.ext.LICENSE_URL
             distribution "repo"
         }
     }
