@@ -99,7 +99,6 @@ bintray {
         attributes = [
                 'maturity': "Stable",
         ]
-
         publish = true
         version {
             name = project.ext.VERSION
