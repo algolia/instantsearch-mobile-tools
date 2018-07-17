@@ -83,13 +83,8 @@ bintray {
     pkg {
         repo = 'maven'
         name = project.ext.CODENAME
-        desc = project.ext.DESC
-        labels = project.ext.LABELS
         licenses = [project.ext.LICENSE]
         vcsUrl = project.ext.REPO
-        websiteUrl = project.ext.WEBSITE
-        issueTrackerUrl = project.ext.WEBSITE + '/issues/'
-
         publish = true
         version {
             name = project.ext.VERSION
