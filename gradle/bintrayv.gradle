@@ -88,15 +88,24 @@ bintray {
         if (project.hasProperty("LABELS")) {
             labels += project.ext.LABELS
         }
+        publicDownloadNumbers = false
+        githubRepo = project.ext.GITHUB
+        githubReleaseNotesFile = project.hasProperty('README')? project.ext.README: "README.md"
+
         licenses = [project.ext.LICENSE]
         vcsUrl = project.ext.REPO
         websiteUrl = project.ext.WEBSITE
-        issueTrackerUrl = project.ext.WEBSITE + '/issues/'
+        issueTrackerUrl = project.ext.WEBSITE + '/issues'
+        attributes = [
+                'maturity': "Stable",
+        ]
 
         publish = true
         version {
             name = project.ext.VERSION
             vcsTag = project.ext.VERSION
+            released = new Date()
+            desc = project.ext.VERSION_DESC
         }
     }
 }
