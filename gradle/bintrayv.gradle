@@ -90,7 +90,7 @@ bintray {
         }
         publicDownloadNumbers = false
         githubRepo = project.ext.GITHUB
-        githubReleaseNotesFile = project.hasProperty('README')? project.ext.README: "README.md"
+        githubReleaseNotesFile = project.hasProperty('CHANGELOG')? project.ext.CHANGELOG: "CHANGELOG.md"
 
         licenses = [project.ext.LICENSE]
         vcsUrl = project.ext.REPO
