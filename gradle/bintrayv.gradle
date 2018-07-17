@@ -105,7 +105,7 @@ bintray {
             name = project.ext.VERSION
             vcsTag = project.ext.VERSION
             released = new Date()
-            desc = project.ext.VERSION_DESC
+            desc = project.hasProperty('VERSION_DESC')? project.ext.VERSION_DESC : "$project.ext.NAME - v$project.ext.VERSION"
         }
     }
 }
