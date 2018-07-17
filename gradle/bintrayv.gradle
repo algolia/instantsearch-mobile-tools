@@ -84,7 +84,10 @@ bintray {
         repo = 'maven'
         name = project.ext.CODENAME
         desc = project.ext.DESC
-        labels = project.ext.LABELS
+        labels = ['algolia', 'instantsearch', 'android', project.ext.BASENAME]
+        if (project.hasProperty("LABELS")) {
+            labels += project.ext.LABELS
+        }
         licenses = [project.ext.LICENSE]
         vcsUrl = project.ext.REPO
         websiteUrl = project.ext.WEBSITE
