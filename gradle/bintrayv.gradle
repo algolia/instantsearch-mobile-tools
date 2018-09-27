@@ -66,6 +66,18 @@ publishing.publications {
                     }
                 }
             }
+            pom.whenConfigured { pom ->
+                println("Current Dependencies ${pom.dependencies}")
+                pom.dependencies.each { dep ->
+                    println("Processing ${dep}")
+                    if (dep.getVersion() == "unspecified" && dep.getGroupId() == rootProjectDir) {
+                        println("Updating dependency as its version was `unspecified`")
+                        dep.setGroupId(project.ext.GROUP)
+                        dep.setVersion(project.ext.VERSION)
+                        println("Updated ${dep}")
+                    }
+                }
+            }
 
             // List all "api" dependencies (for new Gradle) as "compile" dependencies
             configurations.api.getAllDependencies().each { dep -> addDependency(dep, "compile") }
