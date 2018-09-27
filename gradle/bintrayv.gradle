@@ -65,8 +65,6 @@ publishing.publications {
                         exclusionNode.appendNode('artifactId', rule.module ?: '*')
                     }
                 }
-            }
-            pom.whenConfigured { pom ->
                 println("Current Dependencies ${pom.dependencies}")
                 pom.dependencies.each { dep ->
                     println("Processing ${dep}")
