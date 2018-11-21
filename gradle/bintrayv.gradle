@@ -100,20 +100,33 @@ publishing.publications {
     }
 }
 
+group = GROUP
+version = VERSION
+
 bintray {
     user = System.getenv('BINTRAY_USER')
     key = System.getenv('BINTRAY_KEY')
 
     publications = ['BintrayPublication']
+    publish = true // auto publish after upload
     pkg {
         repo = 'maven'
-        name = project.ext.CODENAME
-        licenses = [project.ext.LICENSE]
-        vcsUrl = project.ext.REPO
-        publish = true
+        name = CODENAME
+        desc = DESC
+        licenses = [LICENSE]
+        websiteUrl = WEBSITE
+        issueTrackerUrl = WEBSITE + "/issues/"
+        vcsUrl = REPO
+        labels = LABELS
+        githubRepo = GITHUB
+        githubReleaseNotesFile = 'README.md'
+        publicDownloadNumbers = true
+
         version {
-            name = project.ext.VERSION
-            vcsTag = project.ext.VERSION
+            name = VERSION
+            desc = "Version $VERSION"
+            released = new Date()
+            vcsTag = VERSION
         }
     }
 }
