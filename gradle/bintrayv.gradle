@@ -11,10 +11,14 @@ artifacts {
 
 // Create the pom configuration:
 def pomConfig = {
+    name CODENAME
+    description DESC
+    url WEBSITE
+
     licenses {
         license {
-            name project.ext.LICENSE
-            url project.ext.LICENSE_URL
+            name LICENSE
+            url LICENSE_URL
             distribution "repo"
         }
     }
@@ -25,9 +29,11 @@ def pomConfig = {
             email "hey@algolia.com"
         }
     }
-
     scm {
-        url project.ext.REPO
+        connection REPO
+        developerConnection REPO
+        url WEBSITE
+
     }
 }
 
