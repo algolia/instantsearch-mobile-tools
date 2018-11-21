@@ -1,5 +1,14 @@
 apply plugin: 'com.jfrog.bintray'
 
+// add sources jar tasks as artifacts
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+    archives file: new File("${project.buildDir}/outputs/aar/${project.name}-release.aar"),
+            name: "${project.name}-release.aar",
+            type: "aar"
+}
+
 // Create the pom configuration:
 def pomConfig = {
     licenses {
