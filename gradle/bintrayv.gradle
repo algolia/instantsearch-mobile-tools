@@ -43,19 +43,17 @@ publishing.publications {
         artifact javadocJar
         artifact "${project.buildDir}/outputs/aar/${project.name}-release.aar"
 
-        groupId project.ext.GROUP
-        artifactId project.ext.BASENAME
-        version project.ext.VERSION
-        description project.ext.DESC
+        groupId GROUP
+        artifactId BASENAME
+        version VERSION
+        description DESC
 
         pom.withXml {
             def root = asNode()
             root.children().last() + pomConfig
-            root.appendNode("description", project.ext.DESC) //TODO Find why description is missing from pom.xml
+            root.appendNode("description", DESC) //TODO Find why description is missing from pom.xml
 
             final dependenciesNode = asNode().appendNode('dependencies')
-            println "Adding dependencies node"
-
             ext.addDependency = { Dependency dep, String scope ->
                 if (dep.group == null || dep.version == null || dep.name == null || dep.name == "unspecified") {
                     return // ignore invalid dependencies
