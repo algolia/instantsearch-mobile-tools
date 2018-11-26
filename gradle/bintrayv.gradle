@@ -62,8 +62,8 @@ publishing.publications {
                 // Convert our internal module names into IS artifacts when releasing
                 //TODO: Find a way to avoid mapping modules manually
                 final modulesMap = [
-                        "core": "instantsearch-android-core",
-                        "ui"  : "instantsearch-android"
+                        "core": "instantsearch-androidx-core",
+                        "ui"  : "instantsearch-androidx"
                 ]
                 final depFinalName = dep.group == "com.algolia" && modulesMap.containsKey(dep.name) ?
                         modulesMap.get(dep.name) : dep.name
