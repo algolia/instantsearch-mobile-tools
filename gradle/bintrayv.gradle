@@ -127,6 +127,14 @@ bintray {
             desc = "Version $VERSION"
             released = new Date()
             vcsTag = VERSION
+            
+            gpg {
+                sign = true
+            }
+            mavenCentralSync {
+                user = System.getenv('NEXUS_USERNAME')
+                password = System.getenv('NEXUS_PASSWORD')
+            }      
         }
     }
 }
